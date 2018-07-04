@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="voice_view_max_height">200px</dimen>
+    <dimen name="first_view_height">160px</dimen>
+    <dimen name="second_view_height">140px</dimen>
+    <dimen name="third_view_height">120px</dimen>
+    <dimen name="four_view_height">100px</dimen>
+</resources>

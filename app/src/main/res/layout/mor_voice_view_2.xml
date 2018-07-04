@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/voice_view_max_height"
+    android:layout_height="@dimen/voice_view_max_height">
+
+    <RelativeLayout
+        android:layout_width="@dimen/voice_view_max_height"
+        android:layout_height="@dimen/voice_view_max_height"
+        android:background="#000">
+
+        <ImageView
+            android:id="@+id/firstView"
+            android:layout_width="@dimen/first_view_height"
+            android:layout_height="@dimen/first_view_height"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/shape_voice_one" />
+
+
+        <ImageView
+            android:id="@+id/secondView"
+            android:layout_width="@dimen/second_view_height"
+            android:layout_height="@dimen/second_view_height"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/shape_voice_second" />
+
+
+        <ImageView
+            android:id="@+id/threeView"
+            android:layout_width="@dimen/third_view_height"
+            android:layout_height="@dimen/third_view_height"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/shape_voice_three" />
+
+
+        <ImageView
+            android:id="@+id/fourView"
+            android:layout_width="@dimen/four_view_height"
+            android:layout_height="@dimen/four_view_height"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/shape_voice_four" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

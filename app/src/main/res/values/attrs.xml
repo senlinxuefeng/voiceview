@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SoundView">
+        <attr name="firstColors" format="color" />
+        <attr name="secondColors" format="color" />
+        <attr name="thirdColors" format="color" />
+        <attr name="fourColors" format="color" />
+        <attr name="fiveColors" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="MorVoiceView">
+        <attr name="firstColor" format="color" />
+        <attr name="secondColor" format="color" />
+        <attr name="thirdColor" format="color" />
+        <attr name="fourColor" format="color" />
+    </declare-styleable>
+
+</resources>
