@@ -9,7 +9,33 @@
     android:orientation="vertical"
     tools:context="love.com.voiceanimation.MainActivity">
 
-    <love.com.voiceanimation.MorVoiceView2
+    <TextView
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#fff"
+        android:gravity="center"
+        android:text="强焦点"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#fff"
+        android:gravity="center"
+        android:text="失去焦点"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <love.com.voiceanimation.MorVoiceView
         android:id="@+id/morVoiceView2"
         android:layout_width="600px"
         android:layout_height="600px"

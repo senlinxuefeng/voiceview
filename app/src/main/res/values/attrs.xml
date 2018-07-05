@@ -8,11 +8,5 @@
         <attr name="fiveColors" format="color" />
     </declare-styleable>
 
-    <declare-styleable name="MorVoiceView">
-        <attr name="firstColor" format="color" />
-        <attr name="secondColor" format="color" />
-        <attr name="thirdColor" format="color" />
-        <attr name="fourColor" format="color" />
-    </declare-styleable>
 
 </resources>
