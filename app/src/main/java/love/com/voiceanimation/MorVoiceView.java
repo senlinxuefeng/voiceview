@@ -1,5 +1,6 @@
 package love.com.voiceanimation;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
@@ -33,8 +34,10 @@ public class MorVoiceView extends RelativeLayout {
     private float scale = 1.0f;
 
     private boolean isAsr = false;
+    private boolean isRecording = false;
     private Handler mHandler;
     private long delayMillis = 200;
+    private List<View> viewList;
 
     public MorVoiceView(Context context) {
         this(context, null);
@@ -53,7 +56,7 @@ public class MorVoiceView extends RelativeLayout {
     }
 
     private void initHandlerThread() {
-        HandlerThread handlerThread = new HandlerThread("eee");
+        HandlerThread handlerThread = new HandlerThread("MorVoiceView");
         handlerThread.start();
         //运行在工作线程(子线程)中，用于实现自己的消息处理
         mHandler = new Handler(handlerThread.getLooper(), new Handler.Callback() {
@@ -230,6 +233,7 @@ public class MorVoiceView extends RelativeLayout {
     }
 
     private synchronized void startRecordingAnimation() {
+        updateVolumes(0);
         if (animaList != null && animaList.size() > 0) {
             for (int i = 0; i < animaList.size(); i++) {
                 animaList.get(i).start();
@@ -284,22 +288,92 @@ public class MorVoiceView extends RelativeLayout {
         secondView = view.findViewById(R.id.secondView);
         threeView = view.findViewById(R.id.threeView);
         fourView = view.findViewById(R.id.fourView);
+        viewList = new ArrayList<>();
+        viewList.add(firstView);
+        viewList.add(secondView);
+        viewList.add(threeView);
     }
 
     /**
      * 开启缩放渐变呼吸动画
      */
     private void startScaleBreathAnimation(View view, float scale) {
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, scale);
+        final ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, scale);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1f, scale);
         scaleX.setRepeatCount(ValueAnimator.INFINITE);
         scaleY.setRepeatCount(ValueAnimator.INFINITE);
         AnimatorSet breatheAnima = new AnimatorSet();
         breatheAnima.playTogether(scaleX, scaleY);
-        breatheAnima.setDuration(2500);
+        breatheAnima.setDuration(1400);
         breatheAnima.setInterpolator(new BreatheInterpolator());
+
 //        breatheAnima.start();
         animaList.add(breatheAnima);
+    }
+
+
+    /**
+     * 更新音量值
+     */
+    public synchronized void updateVolumes(int volume) {
+        if (!isAsr) {
+            for (int i = 0; i < animaList.size(); i++) {
+                AnimatorSet animatorSet = animaList.get(i);
+                ArrayList<Animator> animators = animatorSet.getChildAnimations();
+                for (int j = 0; j < animators.size(); j++) {
+                    ObjectAnimator animator = (ObjectAnimator) animators.get(j);
+                    animator.setFloatValues(1f, getScale(volume, i));
+                }
+                viewList.get(i).invalidate();
+            }
+        }
+    }
+
+//    startScaleBreathAnimation(firstView, 1.15f);
+//    startScaleBreathAnimation(secondView, 1.1f);
+//    startScaleBreathAnimation(threeView, 1.05f);
+
+    /**
+     * @param volume       0-100
+     * @param viewPosition
+     * @return
+     */
+    private float getScale(int volume, int viewPosition) {
+        if (volume <= 5) {
+            return viewPosition == 0 ? 1.150f : viewPosition == 1 ? 1.100f : viewPosition == 2 ? 1.050f : 1.15f;
+        } else if (volume > 5 && volume <= 10) {
+            return viewPosition == 0 ? getFirstScale(1) : viewPosition == 1 ? getSecondScale(1) : viewPosition ==2 ? getThirdScale(1): 1.15f;
+        } else if (volume > 10 && volume <= 20) {
+            return viewPosition == 0 ? getFirstScale(2) : viewPosition == 1 ?getSecondScale(2): viewPosition == 2 ? getThirdScale(2) : 1.15f;
+        } else if (volume > 20 && volume <= 30) {
+            return viewPosition == 0 ? getFirstScale(3) : viewPosition == 1 ? getSecondScale(3) : viewPosition == 2 ? getThirdScale(3) : 1.15f;
+        } else if (volume > 30 && volume <= 40) {
+            return viewPosition == 0 ? getFirstScale(4) : viewPosition == 1 ? getSecondScale(4) : viewPosition == 2 ? getThirdScale(4) : 1.15f;
+        } else if (volume > 50 && volume <= 60) {
+            return viewPosition == 0 ? getFirstScale(5)  : viewPosition == 1 ? getSecondScale(5) : viewPosition == 2 ? getThirdScale(5) : 1.15f;
+        } else if (volume > 60 && volume <= 70) {
+            return viewPosition == 0 ? getFirstScale(6) : viewPosition == 1 ? getSecondScale(6) : viewPosition == 2 ? getThirdScale(6) : 1.15f;
+        } else if (volume > 70 && volume <= 80) {
+            return viewPosition == 0 ? getFirstScale(7)  : viewPosition == 1 ? getSecondScale(7) : viewPosition == 2 ? getThirdScale(7) : 1.15f;
+        } else if (volume > 80 && volume <= 90) {
+            return viewPosition == 0 ?getFirstScale(8)  : viewPosition == 1 ? getSecondScale(8) : viewPosition == 2 ? getThirdScale(8) : 1.15f;
+        } else if (volume > 90 && volume <= 100) {
+            return viewPosition == 0 ? getFirstScale(9)  : viewPosition == 1 ? getSecondScale(9): viewPosition == 2 ? getThirdScale(9) : 1.15f;
+        } else {
+            return viewPosition == 0 ? 1.150f : viewPosition == 1 ? 1.100f : viewPosition == 2 ? 1.050f : 1.15f;
+        }
+    }
+
+    private float getFirstScale(int multiple) {
+        return 1.150f + multiple * 0.017f;
+    }
+
+    private float getSecondScale(int multiple) {
+        return 1.100f + multiple * 0.010f;
+    }
+
+    private float getThirdScale(int multiple) {
+        return 1.050f + multiple * 0.007f;
     }
 
     /**
