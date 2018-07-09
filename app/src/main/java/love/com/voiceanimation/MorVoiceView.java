@@ -126,6 +126,7 @@ public class MorVoiceView extends RelativeLayout {
                         startRecordingAnimation();
                     }
                     scale = 1.0f;
+                    isRecording = true;
                 }
             }, 350);
         } else {
@@ -138,6 +139,7 @@ public class MorVoiceView extends RelativeLayout {
                 startRecordingAnimation();
             }
             scale = 1.0f;
+            isRecording = true;
         }
     }
 
@@ -164,6 +166,7 @@ public class MorVoiceView extends RelativeLayout {
      */
     public synchronized void startAsr() {
         if (!isAsr) {
+            isRecording = false;
             isAsr = true;
             toSmall();
         } else {
@@ -177,6 +180,7 @@ public class MorVoiceView extends RelativeLayout {
      */
     public synchronized void stopAsr() {
         if (isAsr) {
+            isRecording = false;
             isAsr = false;
             sendMessage(3, delayMillis);
         }
@@ -187,6 +191,7 @@ public class MorVoiceView extends RelativeLayout {
      */
     public synchronized void stopAsr(long delayMillis) {
         if (isAsr) {
+            isRecording = false;
             isAsr = false;
             sendMessage(3, delayMillis);
         }
@@ -316,7 +321,7 @@ public class MorVoiceView extends RelativeLayout {
      * 更新音量值
      */
     public synchronized void updateVolumes(int volume) {
-        if (!isAsr) {
+        if (!isAsr && isRecording) {
             for (int i = 0; i < animaList.size(); i++) {
                 AnimatorSet animatorSet = animaList.get(i);
                 ArrayList<Animator> animators = animatorSet.getChildAnimations();
@@ -329,10 +334,6 @@ public class MorVoiceView extends RelativeLayout {
         }
     }
 
-//    startScaleBreathAnimation(firstView, 1.15f);
-//    startScaleBreathAnimation(secondView, 1.1f);
-//    startScaleBreathAnimation(threeView, 1.05f);
-
     /**
      * @param volume       0-100
      * @param viewPosition
@@ -342,38 +343,38 @@ public class MorVoiceView extends RelativeLayout {
         if (volume <= 5) {
             return viewPosition == 0 ? 1.150f : viewPosition == 1 ? 1.100f : viewPosition == 2 ? 1.050f : 1.15f;
         } else if (volume > 5 && volume <= 10) {
-            return viewPosition == 0 ? getFirstScale(1) : viewPosition == 1 ? getSecondScale(1) : viewPosition ==2 ? getThirdScale(1): 1.15f;
+            return viewPosition == 0 ? getFirstScale(1) : viewPosition == 1 ? getSecondScale(1) : viewPosition == 2 ? getThirdScale(1) : 1.15f;
         } else if (volume > 10 && volume <= 20) {
-            return viewPosition == 0 ? getFirstScale(2) : viewPosition == 1 ?getSecondScale(2): viewPosition == 2 ? getThirdScale(2) : 1.15f;
+            return viewPosition == 0 ? getFirstScale(2) : viewPosition == 1 ? getSecondScale(2) : viewPosition == 2 ? getThirdScale(2) : 1.15f;
         } else if (volume > 20 && volume <= 30) {
             return viewPosition == 0 ? getFirstScale(3) : viewPosition == 1 ? getSecondScale(3) : viewPosition == 2 ? getThirdScale(3) : 1.15f;
         } else if (volume > 30 && volume <= 40) {
             return viewPosition == 0 ? getFirstScale(4) : viewPosition == 1 ? getSecondScale(4) : viewPosition == 2 ? getThirdScale(4) : 1.15f;
         } else if (volume > 50 && volume <= 60) {
-            return viewPosition == 0 ? getFirstScale(5)  : viewPosition == 1 ? getSecondScale(5) : viewPosition == 2 ? getThirdScale(5) : 1.15f;
+            return viewPosition == 0 ? getFirstScale(5) : viewPosition == 1 ? getSecondScale(5) : viewPosition == 2 ? getThirdScale(5) : 1.15f;
         } else if (volume > 60 && volume <= 70) {
             return viewPosition == 0 ? getFirstScale(6) : viewPosition == 1 ? getSecondScale(6) : viewPosition == 2 ? getThirdScale(6) : 1.15f;
         } else if (volume > 70 && volume <= 80) {
-            return viewPosition == 0 ? getFirstScale(7)  : viewPosition == 1 ? getSecondScale(7) : viewPosition == 2 ? getThirdScale(7) : 1.15f;
+            return viewPosition == 0 ? getFirstScale(7) : viewPosition == 1 ? getSecondScale(7) : viewPosition == 2 ? getThirdScale(7) : 1.15f;
         } else if (volume > 80 && volume <= 90) {
-            return viewPosition == 0 ?getFirstScale(8)  : viewPosition == 1 ? getSecondScale(8) : viewPosition == 2 ? getThirdScale(8) : 1.15f;
+            return viewPosition == 0 ? getFirstScale(8) : viewPosition == 1 ? getSecondScale(8) : viewPosition == 2 ? getThirdScale(8) : 1.15f;
         } else if (volume > 90 && volume <= 100) {
-            return viewPosition == 0 ? getFirstScale(9)  : viewPosition == 1 ? getSecondScale(9): viewPosition == 2 ? getThirdScale(9) : 1.15f;
+            return viewPosition == 0 ? getFirstScale(9) : viewPosition == 1 ? getSecondScale(9) : viewPosition == 2 ? getThirdScale(9) : 1.15f;
         } else {
             return viewPosition == 0 ? 1.150f : viewPosition == 1 ? 1.100f : viewPosition == 2 ? 1.050f : 1.15f;
         }
     }
 
     private float getFirstScale(int multiple) {
-        return 1.150f + multiple * 0.017f;
+        return 1.150f + multiple * 0.022f;
     }
 
     private float getSecondScale(int multiple) {
-        return 1.100f + multiple * 0.010f;
+        return 1.100f + multiple * 0.012f;
     }
 
     private float getThirdScale(int multiple) {
-        return 1.050f + multiple * 0.007f;
+        return 1.050f + multiple * 0.008f;
     }
 
     /**
