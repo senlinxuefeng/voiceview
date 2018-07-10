@@ -93,6 +93,19 @@ public class MorVoiceView extends RelativeLayout {
                             });
                         }
                         break;
+                    case 4:
+                        if (!isAsr) {
+                            setSmallRes(R.drawable.shape_voice_three, R.drawable.shape_voice_second, R.drawable.shape_voice_one);
+                            post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    toBig(5);
+                                }
+                            });
+                        }
+                        break;
+
+
                 }
                 return false;
             }
@@ -193,7 +206,7 @@ public class MorVoiceView extends RelativeLayout {
         if (isAsr) {
             isRecording = false;
             isAsr = false;
-            sendMessage(3, delayMillis);
+            sendMessage(4, delayMillis);
         }
     }
 
@@ -216,6 +229,16 @@ public class MorVoiceView extends RelativeLayout {
     private void sendMessage(int what, long delayMillis) {
         mHandler.sendEmptyMessageDelayed(what, delayMillis);
     }
+
+
+    /**
+     * 还原
+     */
+    public void toBig(long duration) {
+        stopRecordingAnimation();
+        transViewToBig(duration);
+    }
+
 
     /**
      * 还原
@@ -259,20 +282,27 @@ public class MorVoiceView extends RelativeLayout {
 
 
     private synchronized void transViewToSmall() {
-        startTranslationAnimation(firstView, 35, 80, 1f, 0.20f);
-        startTranslationAnimation(secondView, 0, 80, 1f, 0.20f);
-        startTranslationAnimation(threeView, -35, 80, 1f, 0.20f);
+        startTranslationAnimation(firstView, 300,35, 80, 1f, 0.20f);
+        startTranslationAnimation(secondView, 300,0, 80, 1f, 0.20f);
+        startTranslationAnimation(threeView, 300,-35, 80, 1f, 0.20f);
         scale = 0.25f;
     }
 
-    public synchronized void transViewToBig() {
-        startTranslationAnimation(firstView, 0, 0, 0.20f, 1f);
-        startTranslationAnimation(secondView, 0, 0, 0.20f, 1f);
-        startTranslationAnimation(threeView, 0, 0, 0.20f, 1f);
+    public synchronized void transViewToBig(long duration) {
+        startTranslationAnimation(firstView, duration,0, 0, 0.20f, 1f);
+        startTranslationAnimation(secondView, duration,0, 0, 0.20f, 1f);
+        startTranslationAnimation(threeView, duration,0, 0, 0.20f, 1f);
         scale = 1f;
     }
 
-    private synchronized void startTranslationAnimation(View view, float x, float y, float... scale) {
+    public synchronized void transViewToBig() {
+        startTranslationAnimation(firstView, 300,0, 0, 0.20f, 1f);
+        startTranslationAnimation(secondView, 300,0, 0, 0.20f, 1f);
+        startTranslationAnimation(threeView, 300,0, 0, 0.20f, 1f);
+        scale = 1f;
+    }
+
+    private synchronized void startTranslationAnimation(View view, long duration, float x, float y, float... scale) {
         ObjectAnimator translationX = ObjectAnimator.ofFloat(view, "translationX", x);
         ObjectAnimator translationY = ObjectAnimator.ofFloat(view, "translationY", y);
 
@@ -281,10 +311,11 @@ public class MorVoiceView extends RelativeLayout {
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(translationX, translationY, scaleX, scaleY);
-        animatorSet.setDuration(300);
+        animatorSet.setDuration(duration);
         animatorSet.setInterpolator(new LinearInterpolator());
         animatorSet.start();
     }
+
 
     private void initView() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.mor_voice_view, null);

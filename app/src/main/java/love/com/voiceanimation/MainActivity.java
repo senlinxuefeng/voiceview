@@ -55,6 +55,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.four).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                morVoiceView.stopAsr(0);
+            }
+        });
 
 //
 //        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {

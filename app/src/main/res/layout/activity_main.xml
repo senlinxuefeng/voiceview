@@ -38,7 +38,7 @@
     <love.com.voiceanimation.MorVoiceView
         android:id="@+id/morVoiceView2"
         android:layout_width="600px"
-        android:layout_height="600px"
+        android:layout_height="400px"
         android:background="#000"
         android:gravity="center" />
 
@@ -75,6 +75,15 @@
         android:layout_height="40dp"
         android:gravity="center"
         android:text="3"
+        android:textColor="#fff"
+        android:textSize="30px" />
+
+    <TextView
+        android:id="@+id/four"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="4"
         android:textColor="#fff"
         android:textSize="30px" />
 
