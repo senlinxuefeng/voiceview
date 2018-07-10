@@ -30,7 +30,8 @@ public class MorVoiceView extends RelativeLayout {
     private ImageView secondView;
     private ImageView threeView;
     private ImageView fourView;
-    private List<AnimatorSet> animaList = new ArrayList();
+    private List<AnimatorSet> breatheAnimaList = new ArrayList();
+    private List<AnimatorSet> transAnimaList = new ArrayList();
     private float scale = 1.0f;
 
     private boolean isAsr = false;
@@ -120,35 +121,24 @@ public class MorVoiceView extends RelativeLayout {
 
     public synchronized void startRecording() {
         if (isSmall()) {
-            stopAsr(0);
-            postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    transViewToBig();
-                }
-            }, 50);
-            postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (isEmptyAnimation()) {
-                        startScaleBreathAnimation(firstView, 1.15f);
-                        startScaleBreathAnimation(secondView, 1.1f);
-                        startScaleBreathAnimation(threeView, 1.05f);
+            if (!isTransAnimationing()) {
+                reRecording();
+            } else {
+                postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        reRecording();
                     }
-                    if (!isAnimationing()) {
-                        startRecordingAnimation();
-                    }
-                    scale = 1.0f;
-                    isRecording = true;
-                }
-            }, 350);
+                }, delayMillis);
+            }
         } else {
+            stopRecordingAnimation();
             if (isEmptyAnimation()) {
                 startScaleBreathAnimation(firstView, 1.15f);
                 startScaleBreathAnimation(secondView, 1.1f);
                 startScaleBreathAnimation(threeView, 1.05f);
             }
-            if (!isAnimationing()) {
+            if (!isBreatheAnimationing()) {
                 startRecordingAnimation();
             }
             scale = 1.0f;
@@ -156,10 +146,42 @@ public class MorVoiceView extends RelativeLayout {
         }
     }
 
-    private boolean isAnimationing() {
-        if (animaList == null || animaList.size() == 0) return false;
-        for (int i = 0; i < animaList.size(); i++) {
-            if (animaList.get(i).isStarted()) {
+    /**
+     * 重新开始录音
+     */
+    private void reRecording() {
+        stopAsr(0);
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isEmptyAnimation()) {
+                    startScaleBreathAnimation(firstView, 1.15f);
+                    startScaleBreathAnimation(secondView, 1.1f);
+                    startScaleBreathAnimation(threeView, 1.05f);
+                }
+                if (!isBreatheAnimationing()) {
+                    startRecordingAnimation();
+                }
+                scale = 1.0f;
+                isRecording = true;
+            }
+        }, 30);
+    }
+
+    private boolean isTransAnimationing() {
+        if (transAnimaList == null || transAnimaList.size() == 0) return false;
+        for (int i = 0; i < transAnimaList.size(); i++) {
+            if (transAnimaList.get(i).isStarted()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isBreatheAnimationing() {
+        if (breatheAnimaList == null || breatheAnimaList.size() == 0) return false;
+        for (int i = 0; i < breatheAnimaList.size(); i++) {
+            if (breatheAnimaList.get(i).isStarted()) {
                 return true;
             }
         }
@@ -249,22 +271,22 @@ public class MorVoiceView extends RelativeLayout {
     }
 
     private boolean isEmptyAnimation() {
-        return !(animaList != null && animaList.size() != 0);
+        return !(breatheAnimaList != null && breatheAnimaList.size() != 0);
     }
 
     private synchronized void stopRecordingAnimation() {
-        if (animaList != null && animaList.size() > 0) {
-            for (int i = 0; i < animaList.size(); i++) {
-                animaList.get(i).cancel();
+        if (breatheAnimaList != null && breatheAnimaList.size() > 0) {
+            for (int i = 0; i < breatheAnimaList.size(); i++) {
+                breatheAnimaList.get(i).cancel();
             }
         }
     }
 
     private synchronized void startRecordingAnimation() {
         updateVolumes(0);
-        if (animaList != null && animaList.size() > 0) {
-            for (int i = 0; i < animaList.size(); i++) {
-                animaList.get(i).start();
+        if (breatheAnimaList != null && breatheAnimaList.size() > 0) {
+            for (int i = 0; i < breatheAnimaList.size(); i++) {
+                breatheAnimaList.get(i).start();
             }
         }
     }
@@ -282,23 +304,26 @@ public class MorVoiceView extends RelativeLayout {
 
 
     private synchronized void transViewToSmall() {
-        startTranslationAnimation(firstView, 300,35, 80, 1f, 0.20f);
-        startTranslationAnimation(secondView, 300,0, 80, 1f, 0.20f);
-        startTranslationAnimation(threeView, 300,-35, 80, 1f, 0.20f);
+        transAnimaList.clear();
+        startTranslationAnimation(firstView, 300, 35, 80, 1f, 0.20f);
+        startTranslationAnimation(secondView, 300, 0, 80, 1f, 0.20f);
+        startTranslationAnimation(threeView, 300, -35, 80, 1f, 0.20f);
         scale = 0.25f;
     }
 
     public synchronized void transViewToBig(long duration) {
-        startTranslationAnimation(firstView, duration,0, 0, 0.20f, 1f);
-        startTranslationAnimation(secondView, duration,0, 0, 0.20f, 1f);
-        startTranslationAnimation(threeView, duration,0, 0, 0.20f, 1f);
+        transAnimaList.clear();
+        startTranslationAnimation(firstView, duration, 0, 0, 0.20f, 1f);
+        startTranslationAnimation(secondView, duration, 0, 0, 0.20f, 1f);
+        startTranslationAnimation(threeView, duration, 0, 0, 0.20f, 1f);
         scale = 1f;
     }
 
     public synchronized void transViewToBig() {
-        startTranslationAnimation(firstView, 300,0, 0, 0.20f, 1f);
-        startTranslationAnimation(secondView, 300,0, 0, 0.20f, 1f);
-        startTranslationAnimation(threeView, 300,0, 0, 0.20f, 1f);
+        transAnimaList.clear();
+        startTranslationAnimation(firstView, 300, 0, 0, 0.20f, 1f);
+        startTranslationAnimation(secondView, 300, 0, 0, 0.20f, 1f);
+        startTranslationAnimation(threeView, 300, 0, 0, 0.20f, 1f);
         scale = 1f;
     }
 
@@ -314,6 +339,8 @@ public class MorVoiceView extends RelativeLayout {
         animatorSet.setDuration(duration);
         animatorSet.setInterpolator(new LinearInterpolator());
         animatorSet.start();
+
+        transAnimaList.add(animatorSet);
     }
 
 
@@ -344,7 +371,7 @@ public class MorVoiceView extends RelativeLayout {
         breatheAnima.setInterpolator(new BreatheInterpolator());
 
 //        breatheAnima.start();
-        animaList.add(breatheAnima);
+        breatheAnimaList.add(breatheAnima);
     }
 
 
@@ -353,8 +380,8 @@ public class MorVoiceView extends RelativeLayout {
      */
     public synchronized void updateVolumes(int volume) {
         if (!isAsr && isRecording) {
-            for (int i = 0; i < animaList.size(); i++) {
-                AnimatorSet animatorSet = animaList.get(i);
+            for (int i = 0; i < breatheAnimaList.size(); i++) {
+                AnimatorSet animatorSet = breatheAnimaList.get(i);
                 ArrayList<Animator> animators = animatorSet.getChildAnimations();
                 for (int j = 0; j < animators.size(); j++) {
                     ObjectAnimator animator = (ObjectAnimator) animators.get(j);
