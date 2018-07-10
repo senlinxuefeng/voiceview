@@ -132,6 +132,7 @@ public class MorVoiceView extends RelativeLayout {
                 }, delayMillis);
             }
         } else {
+            toBig(0);
             stopRecordingAnimation();
             if (isEmptyAnimation()) {
                 startScaleBreathAnimation(firstView, 1.15f);
