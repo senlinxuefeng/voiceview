@@ -87,5 +87,14 @@
         android:textColor="#fff"
         android:textSize="30px" />
 
+    <TextView
+        android:id="@+id/five"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="5"
+        android:textColor="#fff"
+        android:textSize="30px" />
+
 
 </LinearLayout>

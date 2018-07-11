@@ -67,19 +67,19 @@ public class MorVoiceView extends RelativeLayout {
                 switch (msg.what) {
                     case 0:
                         if (isAsr) {
-                            setSmallRes(R.drawable.shape_voice_four, R.drawable.shape_voice_three, R.drawable.shape_voice_second);
+                            setSmallRes(R.drawable.shape_voice_five, R.drawable.shape_voice_second, R.drawable.shape_voice_second);
                             sendMessage(1, delayMillis);
                         }
                         break;
                     case 1:
                         if (isAsr) {
-                            setSmallRes(R.drawable.shape_voice_second, R.drawable.shape_voice_four, R.drawable.shape_voice_three);
+                            setSmallRes(R.drawable.shape_voice_second, R.drawable.shape_voice_five, R.drawable.shape_voice_second);
                             sendMessage(2, delayMillis);
                         }
                         break;
                     case 2:
                         if (isAsr) {
-                            setSmallRes(R.drawable.shape_voice_three, R.drawable.shape_voice_second, R.drawable.shape_voice_four);
+                            setSmallRes(R.drawable.shape_voice_second, R.drawable.shape_voice_second, R.drawable.shape_voice_five);
                             sendMessage(0, delayMillis);
                         }
                         break;
@@ -89,7 +89,7 @@ public class MorVoiceView extends RelativeLayout {
                             post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    toBig();
+                                    toBig(100);
                                 }
                             });
                         }
@@ -120,38 +120,15 @@ public class MorVoiceView extends RelativeLayout {
     }
 
     public synchronized void startRecording() {
-        if (isSmall()) {
-            if (!isTransAnimationing()) {
-                reRecording();
-            } else {
-                postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        reRecording();
-                    }
-                }, delayMillis);
-            }
-        } else {
-            toBig(0);
-            stopRecordingAnimation();
-            if (isEmptyAnimation()) {
-                startScaleBreathAnimation(firstView, 1.15f);
-                startScaleBreathAnimation(secondView, 1.1f);
-                startScaleBreathAnimation(threeView, 1.05f);
-            }
-            if (!isBreatheAnimationing()) {
-                startRecordingAnimation();
-            }
-            scale = 1.0f;
-            isRecording = true;
-        }
-    }
 
-    /**
-     * 重新开始录音
-     */
-    private void reRecording() {
-        stopAsr(0);
+        isRecording = false;
+        isAsr = false;
+
+        stopTransAnimation();
+        stopRecordingAnimation();
+        setSmallRes(R.drawable.shape_voice_three, R.drawable.shape_voice_second, R.drawable.shape_voice_one);
+        transViewToBig(0);
+
         postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -283,6 +260,14 @@ public class MorVoiceView extends RelativeLayout {
         }
     }
 
+    private synchronized void stopTransAnimation() {
+        if (transAnimaList != null && transAnimaList.size() > 0) {
+            for (int i = 0; i < transAnimaList.size(); i++) {
+                transAnimaList.get(i).cancel();
+            }
+        }
+    }
+
     private synchronized void startRecordingAnimation() {
         updateVolumes(0);
         if (breatheAnimaList != null && breatheAnimaList.size() > 0) {
@@ -296,35 +281,38 @@ public class MorVoiceView extends RelativeLayout {
         postDelayed(new Runnable() {
             @Override
             public void run() {
-                threeView.setImageResource(threeViewDrawable);
-                secondView.setImageResource(secondViewColor);
-                firstView.setImageResource(firstViewColor);
+                threeView.setBackgroundResource(threeViewDrawable);
+                secondView.setBackgroundResource(secondViewColor);
+                firstView.setBackgroundResource(firstViewColor);
             }
         }, 0);
     }
 
+    private float firstScale = 0.200f;
+    private float secondScale = 0.220f;
+    private float thirdScale = 0.240f;
 
     private synchronized void transViewToSmall() {
         transAnimaList.clear();
-        startTranslationAnimation(firstView, 300, 35, 80, 1f, 0.20f);
-        startTranslationAnimation(secondView, 300, 0, 80, 1f, 0.20f);
-        startTranslationAnimation(threeView, 300, -35, 80, 1f, 0.20f);
+        startTranslationAnimation(firstView, 300, 35, 80, 1f, firstScale);
+        startTranslationAnimation(secondView, 300, 0, 80, 1f, secondScale);
+        startTranslationAnimation(threeView, 300, -35, 80, 1f, thirdScale);
         scale = 0.25f;
     }
 
     public synchronized void transViewToBig(long duration) {
         transAnimaList.clear();
-        startTranslationAnimation(firstView, duration, 0, 0, 0.20f, 1f);
-        startTranslationAnimation(secondView, duration, 0, 0, 0.20f, 1f);
-        startTranslationAnimation(threeView, duration, 0, 0, 0.20f, 1f);
+        startTranslationAnimation(firstView, duration, 0, 0, firstScale, 1f);
+        startTranslationAnimation(secondView, duration, 0, 0, secondScale, 1f);
+        startTranslationAnimation(threeView, duration, 0, 0, thirdScale, 1f);
         scale = 1f;
     }
 
     public synchronized void transViewToBig() {
         transAnimaList.clear();
-        startTranslationAnimation(firstView, 300, 0, 0, 0.20f, 1f);
-        startTranslationAnimation(secondView, 300, 0, 0, 0.20f, 1f);
-        startTranslationAnimation(threeView, 300, 0, 0, 0.20f, 1f);
+        startTranslationAnimation(firstView, 300, 0, 0, firstScale, 1f);
+        startTranslationAnimation(secondView, 300, 0, 0, secondScale, 1f);
+        startTranslationAnimation(threeView, 300, 0, 0, thirdScale, 1f);
         scale = 1f;
     }
 

@@ -16,7 +16,7 @@
             android:layout_height="@dimen/first_view_height"
             android:layout_centerInParent="true"
             android:scaleType="centerInside"
-            android:src="@drawable/shape_voice_one" />
+            android:background="@drawable/shape_voice_one" />
 
 
         <ImageView
@@ -25,7 +25,7 @@
             android:layout_height="@dimen/second_view_height"
             android:layout_centerInParent="true"
             android:scaleType="centerInside"
-            android:src="@drawable/shape_voice_second" />
+            android:background="@drawable/shape_voice_second" />
 
 
         <ImageView
@@ -34,7 +34,7 @@
             android:layout_height="@dimen/third_view_height"
             android:layout_centerInParent="true"
             android:scaleType="centerInside"
-            android:src="@drawable/shape_voice_three" />
+            android:background="@drawable/shape_voice_three" />
 
 
         <ImageView
@@ -43,7 +43,7 @@
             android:layout_height="@dimen/four_view_height"
             android:layout_centerInParent="true"
             android:scaleType="centerInside"
-            android:src="@drawable/shape_voice_four" />
+            android:background="@drawable/shape_voice_four" />
 
     </RelativeLayout>
 

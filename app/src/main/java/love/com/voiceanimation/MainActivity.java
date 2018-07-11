@@ -2,6 +2,7 @@ package love.com.voiceanimation;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,9 @@ public class MainActivity extends AppCompatActivity {
     private MorVoiceView morVoiceView;
 
     private Context mContext;
+
+    Handler mHandler = new Handler();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,29 @@ public class MainActivity extends AppCompatActivity {
                 morVoiceView.stopAsr(0);
             }
         });
+
+        findViewById(R.id.five).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                morVoiceView.setVisibility(View.VISIBLE);
+                morVoiceView.startRecording();
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        morVoiceView.startAsr();
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                morVoiceView.setVisibility(View.VISIBLE);
+                                morVoiceView.stopAsr();
+                            }
+                        },1000);
+                    }
+                },300);
+
+            }
+        });
+
 
 //
 //        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {

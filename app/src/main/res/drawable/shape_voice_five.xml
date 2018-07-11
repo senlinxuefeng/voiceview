@@ -4,5 +4,5 @@
     <size
         android:width="@dimen/second_view_height"
         android:height="@dimen/second_view_height" />
-    <solid android:color="@color/secondColor" />
+    <solid android:color="@color/fourColor" />
 </shape>
