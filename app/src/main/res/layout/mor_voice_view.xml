@@ -7,8 +7,7 @@
 
     <RelativeLayout
         android:layout_width="@dimen/voice_view_max_height"
-        android:layout_height="@dimen/voice_view_max_height"
-        android:background="#000">
+        android:layout_height="@dimen/voice_view_max_height">
 
         <ImageView
             android:id="@+id/firstView"
