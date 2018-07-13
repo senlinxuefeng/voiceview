@@ -288,15 +288,16 @@ public class MorVoiceView extends RelativeLayout {
         }, 0);
     }
 
-    private float firstScale = 0.200f;
-    private float secondScale = 0.220f;
-    private float thirdScale = 0.240f;
+    private float firstScale = 0.162f;
+    private float secondScale = 0.182f;
+    private float thirdScale = 0.200f;
+    private int trans = 75;
 
     private synchronized void transViewToSmall() {
         transAnimaList.clear();
-        startTranslationAnimation(firstView, 300, 35, 80, 1f, firstScale);
-        startTranslationAnimation(secondView, 300, 0, 80, 1f, secondScale);
-        startTranslationAnimation(threeView, 300, -35, 80, 1f, thirdScale);
+        startTranslationAnimation(firstView, 300, 35, trans, 1f, firstScale);
+        startTranslationAnimation(secondView, 300, 0, trans, 1f, secondScale);
+        startTranslationAnimation(threeView, 300, -35, trans, 1f, thirdScale);
         scale = 0.25f;
     }
 
